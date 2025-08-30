@@ -11,7 +11,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-// HTMLElementは、新しい仕様に基づいたHTML要素を表現する構造体
+// HTMLElement represents an HTML element
 type HTMLElement struct {
 	TagName    string                 `json:"-"`
 	ID         string                 `json:"-"`
@@ -19,25 +19,25 @@ type HTMLElement struct {
 	Child      interface{}            `json:"child,omitempty"`
 }
 
-// JSONOutputは最終的なJSON出力の形式
+// JSONOutput represents the final JSON output format
 type JSONOutput map[string]*HTMLElement
 
-// showHelpはヘルプメッセージを表示する
+// showHelp displays the help message
 func showHelp() {
-	fmt.Println("HTMLをJSONに変換するコマンド hj")
+	fmt.Println("HJ - HTML to JSON converter")
 	fmt.Println("")
-	fmt.Println("使用方法:")
-	fmt.Println("  hj [HTMLファイルパス|URL]  - HTMLファイルまたはURLからHTMLを読み取り、JSONに変換")
-	fmt.Println("  cat file.html | hj -      - 標準入力からHTMLを読み取り、JSONに変換")
-	fmt.Println("  hj --help                 - このヘルプを表示")
+	fmt.Println("Usage:")
+	fmt.Println("  hj [HTMLfilePath|URL]     - Read HTML from file or URL and convert to JSON")
+	fmt.Println("  cat file.html | hj -      - Read HTML from stdin and convert to JSON")
+	fmt.Println("  hj --help                 - Show this help message")
 	fmt.Println("")
-	fmt.Println("例:")
+	fmt.Println("Examples:")
 	fmt.Println("  hj index.html")
 	fmt.Println("  hj https://example.com")
 	fmt.Println("  cat test.html | hj -")
 }
 
-// getHTMLはファイル、URL、または標準入力からHTMLを取得する
+// getHTML retrieves HTML from file, URL, or stdin
 func getHTML(input string) (string, error) {
 	if input == "" {
 		showHelp()
@@ -45,42 +45,42 @@ func getHTML(input string) (string, error) {
 	}
 
 	if input == "-" {
-		// 標準入力から読み取り
+		// Read from stdin
 		data, err := io.ReadAll(os.Stdin)
 		if err != nil {
-			return "", fmt.Errorf("標準入力の読み取りに失敗しました: %v", err)
+			return "", fmt.Errorf("failed to read from stdin: %v", err)
 		}
 		return string(data), nil
 	}
 
 	if strings.HasPrefix(input, "http://") || strings.HasPrefix(input, "https://") {
-		// URLからHTMLを取得
+		// Fetch HTML from URL
 		resp, err := http.Get(input)
 		if err != nil {
-			return "", fmt.Errorf("URLの取得に失敗しました: %v", err)
+			return "", fmt.Errorf("failed to fetch URL: %v", err)
 		}
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			return "", fmt.Errorf("HTTPエラー: %d", resp.StatusCode)
+			return "", fmt.Errorf("HTTP error: %d", resp.StatusCode)
 		}
 
 		data, err := io.ReadAll(resp.Body)
 		if err != nil {
-			return "", fmt.Errorf("レスポンスの読み取りに失敗しました: %v", err)
+			return "", fmt.Errorf("failed to read response: %v", err)
 		}
 		return string(data), nil
 	}
 
-	// ファイルから読み取り
+	// Read from file
 	data, err := os.ReadFile(input)
 	if err != nil {
-		return "", fmt.Errorf("ファイルの読み取りに失敗しました: %v", err)
+		return "", fmt.Errorf("failed to read file: %v", err)
 	}
 	return string(data), nil
 }
 
-// generateElementKeyは要素名とIDから仕様に従ったキーを生成する
+// generateElementKey generates a key according to specification from tag name and ID
 func generateElementKey(tagName, id string) string {
 	if id != "" {
 		return tagName + "#" + id
@@ -88,11 +88,11 @@ func generateElementKey(tagName, id string) string {
 	return tagName
 }
 
-// parseHTMLToJSONはHTMLを新しい仕様に基づいてJSONに変換する
+// parseHTMLToJSON converts HTML to JSON based on new specification
 func parseHTMLToJSON(n *html.Node) interface{} {
 	switch n.Type {
 	case html.DocumentNode:
-		// ドキュメントノードの場合、子ノード（通常はhtml要素）を処理
+		// For document node, process child nodes (usually html element)
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			if c.Type == html.ElementNode {
 				return parseHTMLToJSON(c)
@@ -105,7 +105,7 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 			TagName: n.Data,
 		}
 
-		// 属性を処理
+		// Process attributes
 		var id string
 		if len(n.Attr) > 0 {
 			for _, attr := range n.Attr {
@@ -121,7 +121,7 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 			}
 		}
 
-		// 子ノードを処理
+		// Process child nodes
 		var children []interface{}
 		var textContent strings.Builder
 
@@ -139,7 +139,7 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 			}
 		}
 
-		// childの内容を決定
+		// Determine child content
 		if len(children) > 0 {
 			element.Child = children
 		} else if textContent.Len() > 0 {
@@ -165,19 +165,19 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 	}
 }
 
-// htmlToJSONはHTMLを新しい仕様に基づいてJSONに変換する
+// htmlToJSON converts HTML to JSON based on new specification
 func htmlToJSON(htmlContent string) (string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))
 	if err != nil {
-		return "", fmt.Errorf("HTMLのパースに失敗しました: %v", err)
+		return "", fmt.Errorf("failed to parse HTML: %v", err)
 	}
 
-	// 新しい仕様に基づいたJSON構造を作成
+	// Create JSON structure based on new specification
 	jsonStructure := parseHTMLToJSON(doc)
 
 	jsonData, err := json.MarshalIndent(jsonStructure, "", "    ")
 	if err != nil {
-		return "", fmt.Errorf("JSONへの変換に失敗しました: %v", err)
+		return "", fmt.Errorf("failed to convert to JSON: %v", err)
 	}
 
 	return string(jsonData), nil
@@ -186,7 +186,7 @@ func htmlToJSON(htmlContent string) (string, error) {
 func main() {
 	args := os.Args[1:]
 
-	// 引数がない場合またはhelpオプションの場合
+	// Show help when no arguments or help option
 	if len(args) == 0 {
 		showHelp()
 		return
@@ -197,20 +197,20 @@ func main() {
 		return
 	}
 
-	// HTMLを取得
+	// Get HTML
 	htmlContent, err := getHTML(args[0])
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "エラー: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 
-	// HTMLをJSONに変換
+	// Convert HTML to JSON
 	jsonOutput, err := htmlToJSON(htmlContent)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "エラー: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 
-	// JSON出力
+	// Output JSON
 	fmt.Println(jsonOutput)
 }
