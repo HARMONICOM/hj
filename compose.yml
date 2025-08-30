@@ -1,0 +1,20 @@
+services:
+  go:
+    build:
+      context: ./docker/go
+      dockerfile: Dockerfile
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1G'
+        max-file: '1'
+    shm_size: "640mb"
+    ulimits:
+      nofile:
+        soft: "65536"
+        hard: "65536"
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src/app
+    working_dir: /usr/src/app
