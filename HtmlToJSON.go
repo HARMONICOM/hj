@@ -104,8 +104,8 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 	}
 }
 
-// htmlToJSON converts HTML to JSON based on new specification
-func htmlToJSON(htmlContent string) (string, error) {
+// HtmlToJSON converts HTML to JSON based on new specification
+func HtmlToJSON(htmlContent string) (string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))
 	if err != nil {
 		return "", fmt.Errorf("failed to parse HTML: %v", err)

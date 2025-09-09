@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/HARMONICOM/hj"
+	hj "github.com/HARMONICOM/hj"
 )
 
 // showHelp displays the help message
@@ -90,7 +90,7 @@ func main() {
 	}
 
 	// Convert HTML to JSON
-	jsonOutput, err := hj.htmlToJSON(htmlContent)
+	jsonOutput, err := hj.HtmlToJSON(htmlContent)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
