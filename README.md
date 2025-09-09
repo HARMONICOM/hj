@@ -1,11 +1,29 @@
 # `HJ` - HTML to JSON Converter
 
 ## Overview
-A command that takes HTML as standard input and outputs JSON as standard output.<br>
+A module and executable that reads HTML and outputs JSON.<br>
 Written in Go.
 
 ## Usage
-Read HTML from file or URL and convert to JSON
+
+### Module
+Import the module and call `hj.HtmlToJSON(string)` to output JSON.
+```go
+import (
+	hj "github.com/HARMONICOM/hj"
+)
+
+func main() {
+    ...
+    json, err := hj.HtmlToJSON(htmlstring)
+    ...
+}
+```
+See `cmd/hj.go` for details.
+
+### Command
+The `cmd` directory contains code for execution as a command.<br>
+When built and executed, it outputs the input HTML as JSON.
 ```sh
 hj [HTMLFilePath|URL]
 ```
@@ -137,21 +155,21 @@ hj sample.html | jq .html.child[0].head.child[0].title.child
 "Title"
 ```
 
-## Build
+## Build Command
 ```sh
-go build -o hj
+go build cmd/hj.go
 ```
 
 You can also use Docker to build Linux commands without environment dependencies. This requires Docker runtime and docker compose.
 
 ```sh
 make build
-make go "build -o hj"
+make go "build cmd/hj.go"
 ```
 * Make errors can be ignored.
 
 ## Other
-This program was created by AI.<br>
+This program base was created by AI.<br>
 The specifications used during creation are stored in the specifications directory.<br>
 
 ## License

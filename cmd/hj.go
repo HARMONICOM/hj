@@ -12,6 +12,7 @@ import (
 
 // showHelp displays the help message
 func showHelp() {
+	fmt.Println("")
 	fmt.Println("HJ - HTML to JSON converter")
 	fmt.Println("")
 	fmt.Println("Usage:")
@@ -23,6 +24,7 @@ func showHelp() {
 	fmt.Println("  hj index.html")
 	fmt.Println("  hj https://example.com")
 	fmt.Println("  cat test.html | hj -")
+  fmt.Println("")
 }
 
 // getHTML retrieves HTML from file, URL, or stdin
