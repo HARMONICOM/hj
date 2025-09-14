@@ -50,8 +50,8 @@ func TestGenerateElementKey(t *testing.T) {
 	}
 }
 
-// TestHTMLToJSON_SimpleElements tests basic HTML elements
-func TestHTMLToJSON_SimpleElements(t *testing.T) {
+// TestHTMLtoJSON_SimpleElements tests basic HTML elements
+func TestHTMLtoJSON_SimpleElements(t *testing.T) {
 	tests := []struct {
 		name        string
 		html        string
@@ -92,7 +92,7 @@ func TestHTMLToJSON_SimpleElements(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := HtmlToJSON(tt.html)
+			result, err := HTMLtoJSON(tt.html)
 
 			if tt.expectError && err == nil {
 				t.Errorf("Expected error but got none")
@@ -117,8 +117,8 @@ func TestHTMLToJSON_SimpleElements(t *testing.T) {
 	}
 }
 
-// TestHTMLToJSON_ComplexStructures tests complex HTML structures
-func TestHTMLToJSON_ComplexStructures(t *testing.T) {
+// TestHTMLtoJSON_ComplexStructures tests complex HTML structures
+func TestHTMLtoJSON_ComplexStructures(t *testing.T) {
 	tests := []struct {
 		name string
 		html string
@@ -178,7 +178,7 @@ func TestHTMLToJSON_ComplexStructures(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := HtmlToJSON(tt.html)
+			result, err := HTMLtoJSON(tt.html)
 			if err != nil {
 				t.Errorf("Unexpected error: %v", err)
 				return
@@ -197,8 +197,8 @@ func TestHTMLToJSON_ComplexStructures(t *testing.T) {
 	}
 }
 
-// TestHTMLToJSON_EdgeCases tests edge cases and potential error conditions
-func TestHTMLToJSON_EdgeCases(t *testing.T) {
+// TestHTMLtoJSON_EdgeCases tests edge cases and potential error conditions
+func TestHTMLtoJSON_EdgeCases(t *testing.T) {
 	tests := []struct {
 		name        string
 		html        string
@@ -251,7 +251,7 @@ func TestHTMLToJSON_EdgeCases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := HtmlToJSON(tt.html)
+			result, err := HTMLtoJSON(tt.html)
 
 			if tt.expectError && err == nil {
 				t.Errorf("Expected error but got none")
@@ -275,8 +275,8 @@ func TestHTMLToJSON_EdgeCases(t *testing.T) {
 	}
 }
 
-// TestHTMLToJSON_AttributeHandling tests specific attribute handling
-func TestHTMLToJSON_AttributeHandling(t *testing.T) {
+// TestHTMLtoJSON_AttributeHandling tests specific attribute handling
+func TestHTMLtoJSON_AttributeHandling(t *testing.T) {
 	tests := []struct {
 		name string
 		html string
@@ -305,7 +305,7 @@ func TestHTMLToJSON_AttributeHandling(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := HtmlToJSON(tt.html)
+			result, err := HTMLtoJSON(tt.html)
 			if err != nil {
 				t.Errorf("Unexpected error: %v", err)
 				return
@@ -323,8 +323,8 @@ func TestHTMLToJSON_AttributeHandling(t *testing.T) {
 	}
 }
 
-// BenchmarkHTMLToJSON benchmarks the htmlToJSON function
-func BenchmarkHTMLToJSON(b *testing.B) {
+// BenchmarkHTMLtoJSON benchmarks the HTMLtoJSON function
+func BenchmarkHTMLtoJSON(b *testing.B) {
 	html := `<article id="article1">
 		<header>
 			<h1>Benchmark Article</h1>
@@ -343,7 +343,7 @@ func BenchmarkHTMLToJSON(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, err := HtmlToJSON(html)
+		_, err := HTMLtoJSON(html)
 		if err != nil {
 			b.Fatalf("Benchmark failed: %v", err)
 		}

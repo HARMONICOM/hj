@@ -7,16 +7,16 @@ Written in Go.
 ## Usage
 
 ### Module
-Import the module and call `hj.HtmlToJSON(string)` to output JSON.
+Import the module and call `hj.HTMLtoJSON(string)` to output JSON.
 ```go
 import (
-	hj "github.com/HARMONICOM/hj"
+  hj "github.com/HARMONICOM/hj"
 )
 
 func main() {
-    ...
-    json, err := hj.HtmlToJSON(htmlstring)
-    ...
+  ...
+  json, err := hj.HTMLtoJSON(htmlstring)
+  ...
 }
 ```
 See `cmd/hj.go` for details.

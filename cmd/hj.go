@@ -92,7 +92,7 @@ func main() {
 	}
 
 	// Convert HTML to JSON
-	jsonOutput, err := hj.HtmlToJSON(htmlContent)
+	jsonOutput, err := hj.HTMLtoJSON(htmlContent)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)

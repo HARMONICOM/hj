@@ -27,14 +27,14 @@ func generateElementKey(tagName, id string) string {
 	return tagName
 }
 
-// parseHTMLToJSON converts HTML to JSON based on new specification
-func parseHTMLToJSON(n *html.Node) interface{} {
+// parseHTMLtoJSON converts HTML to JSON based on new specification
+func parseHTMLtoJSON(n *html.Node) interface{} {
 	switch n.Type {
 	case html.DocumentNode:
 		// For document node, process child nodes (usually html element)
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			if c.Type == html.ElementNode {
-				return parseHTMLToJSON(c)
+				return parseHTMLtoJSON(c)
 			}
 		}
 		return nil
@@ -66,7 +66,7 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			if c.Type == html.ElementNode {
-				childJSON := parseHTMLToJSON(c)
+				childJSON := parseHTMLtoJSON(c)
 				if childJSON != nil {
 					children = append(children, childJSON)
 				}
@@ -104,15 +104,15 @@ func parseHTMLToJSON(n *html.Node) interface{} {
 	}
 }
 
-// HtmlToJSON converts HTML to JSON based on new specification
-func HtmlToJSON(htmlContent string) (string, error) {
+// HTMLtoJSON converts HTML to JSON based on new specification
+func HTMLtoJSON(htmlContent string) (string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))
 	if err != nil {
 		return "", fmt.Errorf("failed to parse HTML: %v", err)
 	}
 
 	// Create JSON structure based on new specification
-	jsonStructure := parseHTMLToJSON(doc)
+	jsonStructure := parseHTMLtoJSON(doc)
 
 	jsonData, err := json.MarshalIndent(jsonStructure, "", "    ")
 	if err != nil {
